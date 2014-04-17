@@ -79,12 +79,11 @@ class wechat {
 				}
 				
 				//调用机器人回复
-				include('xiaojo.php');
-				//include('simsimi.php');
+				//include('xiaojo.php');
+				include('simsimi.php');
 				//include('yun2d.php');
 				
-				//$contentStr = SimSimi($keyword); //返回消息内容
-				$contentStr = $fromUsername;
+				$contentStr = SimSimi($keyword); //返回消息内容
 				/**
 				if ("" == $contentStr)
 				{
@@ -92,11 +91,21 @@ class wechat {
 				}
 		
 				$contentStr = str_replace("小黄鸡","L",$contentStr);
+				$contentStr = str_replace("小鸡鸡","L",$contentStr);
 				$contentStr = str_replace("simi","L",$contentStr);
 				$contentStr = str_replace("贱鸡","贱L",$contentStr);
 				*/
 				
-				//mysql: root/admin123 wechatdb 表名为wexin_users
+				$sql = "select msgcount from users where userid = '".$fromUsername."'";
+				$result = mysql_fetch_array($this->dboption($sql));
+				$msgcount = $result[0];
+				
+				$msgcount++;
+				if ($msgcount == 1)
+				{
+					$sql = "update users set username = '".$keyword."',msgcount = ".$msgcount." where userid = '".$fromUsername."'";
+					$this->dboption($sql);
+				}
 				
 				if ($contentStr == "")
 				{
@@ -114,11 +123,19 @@ class wechat {
 				$event = trim($postObj->Event);
 				if ($event == "subscribe")
 				{
-					$contentStr = "主人，您好！我是风流倜傥，玉树临风的L。以后您无聊时可以尽情调戏我~请告诉我应该怎么称呼主人您？（查看使用说明请输入help）"; 
+					$contentStr = "主人，您好！我是风流倜傥，玉树临风的L。以后您无聊时可以尽情调戏我~请告诉我应该怎么称呼主人您？"; 
 
 					//格式化消息模板
 					$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
 					echo $resultStr; //输出结果
+					
+					$sql = "insert into users (userid,msgcount) values ('".$fromUsername."',0)";
+					$this->dboption($sql);
+				}
+				else if ($event == "unsubscribe")
+				{
+					$sql = "delete from users where userid = '".$fromUsername."'";
+					$this->dboption($sql);
 				}
 				
 				break;
@@ -128,6 +145,29 @@ class wechat {
 				break;
 		}
 		
+	}
+	
+	public function dboption($sql)
+	{
+		//mysql: root/admin123 wechatdb 表名为users
+				
+		$servername = "localhost";
+		$username = "root";
+		$password = "admin123";
+				
+		$con = mysql_connect($servername,$username,$password);
+				
+		if (!$con)
+		{
+			die('Could not connect: ' . mysql_error());
+		}
+				
+		mysql_select_db("wechatdb", $con);
+		$result = mysql_query($sql);
+				
+		mysql_close($con);
+		
+		return $result;
 	}
 	
 	private function checkSignature()
