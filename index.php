@@ -6,6 +6,7 @@
 +------------------------------------------------*/
 
 define("TOKEN","somnus");
+$index = 0;
 $wechatObj = new wechat();
 
 if (isset($_GET["echostr"]))
@@ -17,6 +18,13 @@ if (isset($_GET["echostr"]))
 $wechatObj->responseMsg();
 
 class wechat {
+	
+	public static $index = 0;
+	
+	public function __construct($i)
+	{
+		self::$index = $i;
+	}
 	
 	public function valid()
 	{
@@ -71,10 +79,13 @@ class wechat {
 				}
 				
 				//调用机器人回复
-				include('simsimi.php');
-				include('yun2d.php');
+				include('xiaojo.php');
+				//include('simsimi.php');
+				//include('yun2d.php');
 				
-				$contentStr = SimSimi($keyword); //返回消息内容
+				//$contentStr = SimSimi($keyword); //返回消息内容
+				$contentStr = $fromUsername;
+				/**
 				if ("" == $contentStr)
 				{
 					$contentStr = yun2d($keyword);
@@ -83,7 +94,15 @@ class wechat {
 				$contentStr = str_replace("小黄鸡","L",$contentStr);
 				$contentStr = str_replace("simi","L",$contentStr);
 				$contentStr = str_replace("贱鸡","贱L",$contentStr);
-
+				*/
+				
+				//mysql: root/admin123 wechatdb 表名为wexin_users
+				
+				if ($contentStr == "")
+				{
+					$contentStr = "亲，我真么不知道肿么回答这个问题了。。。";
+				}
+				
 				//格式化消息模板
 				$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
 				echo $resultStr; //输出结果
@@ -95,7 +114,7 @@ class wechat {
 				$event = trim($postObj->Event);
 				if ($event == "subscribe")
 				{
-					$contentStr = "主人，您好！我是风流倜傥，玉树临风的。以后您无聊时可以尽情调戏我~请告诉我应该怎么称呼主人您？（查看使用说明请输入help）"; 
+					$contentStr = "主人，您好！我是风流倜傥，玉树临风的L。以后您无聊时可以尽情调戏我~请告诉我应该怎么称呼主人您？（查看使用说明请输入help）"; 
 
 					//格式化消息模板
 					$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
