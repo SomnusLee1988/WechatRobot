@@ -6,6 +6,7 @@
 +------------------------------------------------*/
 
 define("TOKEN","somnus");
+define("AUTHOR","孙碧清");
 $index = 0;
 $wechatObj = new wechat();
 
@@ -89,12 +90,13 @@ class wechat {
 				{
 					$contentStr = yun2d($keyword);
 				}
+				*/
 		
 				$contentStr = str_replace("小黄鸡","L",$contentStr);
 				$contentStr = str_replace("小鸡鸡","L",$contentStr);
 				$contentStr = str_replace("simi","L",$contentStr);
 				$contentStr = str_replace("贱鸡","贱L",$contentStr);
-				*/
+				
 				
 				$sql = "select msgcount from users where userid = '".$fromUsername."'";
 				$result = mysql_fetch_array($this->dboption($sql));
@@ -103,18 +105,131 @@ class wechat {
 				$msgcount++;
 				if ($msgcount == 1)
 				{
+					//回复
+					$contentStr = "Hi, ".$keyword.",现在请随便问我点问题试试看吧~比如输入\"讲个笑话\"。";
+					$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
+					echo $resultStr; //输出结果
+					
 					$sql = "update users set username = '".$keyword."',msgcount = ".$msgcount." where userid = '".$fromUsername."'";
+					$this->dboption($sql);
+					
+					//记录消息内容
+					$sql = "insert into msgs (userid,send,receive,recordid) values ('".$fromUsername."','".$keyword."','".$contentStr."','".$msgcount."')";
+					$this->dboption($sql);
+				}
+				else if ($msgcount == 4)
+				{
+					$sql = "select username from users where userid = '".$fromUsername."'";
+					$result = mysql_fetch_array($this->dboption($sql));
+					$username = $result[0];
+					if (empty($username) || $username == "")
+					{
+						$username = "主人";
+					}
+					$contentStr = $username.", 你问的问题弱爆了,我懒得回答了。要不我用".AUTHOR."的一个秘密跟你交换一个秘密吧?[坏笑]";
+					$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
+					echo $resultStr; //输出结果
+					
+					//更新消息数量
+					$sql = "update users set msgcount = ".$msgcount." where userid = '".$fromUsername."'";
+					$this->dboption($sql);
+					//记录消息内容
+					$sql = "insert into msgs (userid,send,receive,recordid) values ('".$fromUsername."','".$keyword."','".$contentStr."','".$msgcount."')";
+					$this->dboption($sql);
+				}
+				else if ($msgcount == 5)
+				{
+					$contentStr = "偷偷告诉你，".AUTHOR."曾经跟我打赌打输了，裸奔从我们四楼走到了一楼。[大笑]";
+					$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
+					echo $resultStr; //输出结果
+					
+					//更新消息数量
+					$sql = "update users set msgcount = ".$msgcount." where userid = '".$fromUsername."'";
+					$this->dboption($sql);
+					//记录消息内容
+					$sql = "insert into msgs (userid,send,receive,recordid) values ('".$fromUsername."','".$keyword."','".$contentStr."','".$msgcount."')";
+					$this->dboption($sql);
+				}
+				else if ($msgcount == 6)
+				{
+					$contentStr = "不管你信不信,反正我是信了！好了，现在轮到你告诉我一个你自己的秘密了~[阴险]";
+					$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
+					echo $resultStr; //输出结果
+					
+					//更新消息数量
+					$sql = "update users set msgcount = ".$msgcount." where userid = '".$fromUsername."'";
+					$this->dboption($sql);
+					//记录消息内容
+					$sql = "insert into msgs (userid,send,receive,recordid) values ('".$fromUsername."','".$keyword."','".$contentStr."','".$msgcount."')";
+					$this->dboption($sql);
+				}
+				else if ($msgcount == 7)
+				{
+					$sql = "select username from users where userid = '".$fromUsername."'";
+					$result = mysql_fetch_array($this->dboption($sql));
+					$username = $result[0];
+					if (empty($username) || $username == "")
+					{
+						$username = "主人";
+					}
+					$contentStr = $username.", 耍赖可不好哦！本来还想再分享一个".AUTHOR."的更劲爆的秘密呢！不想听就算了，我去找小伙伴玩了~";
+					$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
+					echo $resultStr; //输出结果
+					
+					//更新消息数量
+					$sql = "update users set msgcount = ".$msgcount." where userid = '".$fromUsername."'";
+					$this->dboption($sql);
+					//记录消息内容
+					$sql = "insert into msgs (userid,send,receive,recordid) values ('".$fromUsername."','".$keyword."','".$contentStr."','".$msgcount."')";
+					$this->dboption($sql);
+				}
+				else if ($msgcount == 8)
+				{
+					$contentStr = "真想听？那这次可不许忽悠我！等我说完，你也要说一个你自己的秘密！";
+					$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
+					echo $resultStr; //输出结果
+					
+					//更新消息数量
+					$sql = "update users set msgcount = ".$msgcount." where userid = '".$fromUsername."'";
+					$this->dboption($sql);
+					//记录消息内容
+					$sql = "insert into msgs (userid,send,receive,recordid) values ('".$fromUsername."','".$keyword."','".$contentStr."','".$msgcount."')";
+					$this->dboption($sql);
+				}
+				else if ($msgcount == 9)
+				{
+					$contentStr = AUTHOR."他对一个妹子一见钟情了";
+					$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
+					echo $resultStr; //输出结果
+					
+					//更新消息数量
+					$sql = "update users set msgcount = ".$msgcount." where userid = '".$fromUsername."'";
+					$this->dboption($sql);
+					//记录消息内容
+					$sql = "insert into msgs (userid,send,receive,recordid) values ('".$fromUsername."','".$keyword."','".$contentStr."','".$msgcount."')";
+					$this->dboption($sql);
+				}
+
+				else
+				{
+					if ($contentStr == "")
+					{
+						$contentStr = "亲，我真的不知道肿么回答这个问题了。。。";
+					}
+				
+					//格式化消息模板
+					$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
+					echo $resultStr; //输出结果
+					
+					//更新消息数量
+					$sql = "update users set msgcount = ".$msgcount." where userid = '".$fromUsername."'";
+					$this->dboption($sql);
+					
+					//记录消息内容
+					$sql = "insert into msgs (userid,send,receive,recordid) values ('".$fromUsername."','".$keyword."','".$contentStr."','".$msgcount."')";
 					$this->dboption($sql);
 				}
 				
-				if ($contentStr == "")
-				{
-					$contentStr = "亲，我真么不知道肿么回答这个问题了。。。";
-				}
-				
-				//格式化消息模板
-				$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
-				echo $resultStr; //输出结果
 				break;
 			}
 			
@@ -129,11 +244,13 @@ class wechat {
 					$resultStr = sprintf($textTpl, $fromUsername, $toUsername, $time, "text", $contentStr);
 					echo $resultStr; //输出结果
 					
+					//记录用户
 					$sql = "insert into users (userid,msgcount) values ('".$fromUsername."',0)";
 					$this->dboption($sql);
 				}
 				else if ($event == "unsubscribe")
 				{
+					//删除用户
 					$sql = "delete from users where userid = '".$fromUsername."'";
 					$this->dboption($sql);
 				}
@@ -156,6 +273,7 @@ class wechat {
 		$password = "admin123";
 				
 		$con = mysql_connect($servername,$username,$password);
+		$program_char = "utf8";
 				
 		if (!$con)
 		{
@@ -163,6 +281,8 @@ class wechat {
 		}
 				
 		mysql_select_db("wechatdb", $con);
+		mysql_set_charset($program_char,$con);
+		$charset = mysql_client_encoding($con);
 		$result = mysql_query($sql);
 				
 		mysql_close($con);
